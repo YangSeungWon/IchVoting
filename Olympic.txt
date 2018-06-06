@@ -3,6 +3,12 @@ pragma solidity ^0.4.17;
 contract Vote{
     uint8 num=0;
     uint16 voter=0;
+    address public owner;
+
+    modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
+    }
 
     struct Candidate{
         string name;
