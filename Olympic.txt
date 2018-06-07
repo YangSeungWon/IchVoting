@@ -1,34 +1,26 @@
 pragma solidity ^0.4.17;
 
 contract Vote{
-    uint8 num=0;
     uint16 voter=0;
     address public owner;
-
-    modifier onlyOwner {
-        require(msg.sender == owner);
-        _;
-    }
-
+    
     struct Candidate{
-        string name;
         uint16 votes;
     } Candidate[5] candidates;
 
     bytes8[5] res;
 
+    function setOwner() public{
+        owner=msg.sender;
+    }
+
     function vote(uint8 who) public{
+        require(owner==msg.sender);
         voter++;
         candidates[who-1].votes++;
     }
 
     function result() constant public returns(uint16,uint16,uint16,uint16,uint16,uint16){
-        return (voter,candidates[0].name,candidates[0].votes,candidates[1].name,candidates[1].votes,candidates[2].name,candidates[2].votes,candidates[3].name,candidates[3].votes,candidates[4].name,candidates[4].votes);
-    }
-
-    function addCandidate(string name) public{
-        require(num<5);
-        candidates[num].name=name;
-        num++;
+        return (voter,candidates[0].votes,candidates[1].votes,candidates[2].votes,candidates[3].votes,candidates[4].votes);
     }
 }
