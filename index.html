@@ -1,112 +1,55 @@
 <DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <title>Voting</title>
+        <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="grid.css" rel="stylesheet">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery.min.js"></script>
     </head>
     <body>
         <strong><big>2018 이천고 학생회장 모의선거</big></strong> <br />
         ______축구(sc)  1st: <Input type="number" id="sc1"> 2nd: <Input type="number" id="sc2">  <br>
-        <button id="check" onclick="check_click();" type="button">Check</button><br />
+
+        <div class="row">
+          <div class="col-md-4">.col-md-4</div>
+          <div class="col-md-4">.col-md-4</div>
+          <div class="col-md-4">.col-md-4</div>
+        </div>
+
+        <button id="send" onclick="send_click();" type="button">Send</button><br />
 
         <script>
-            const Web3 = require('web3')
-            const Tx = require('ethereumjs-tx')
-            const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/INFURA_KEY'))
-            const addressFrom = '0x3e62Ffa65462F1a76E3f8c3D4F90F319570af5fD'
-            const privKey = 'PRIVATE_KEY'
-            const addressTo = '0x1463500476a3ADDa33ef1dF530063fE126203186'
-            function sendSigned(txData, cb) {
-              const privateKey = new Buffer(config.privKey, 'hex')
-              const transaction = new Tx(txData)
-              transaction.sign(privateKey)
-              const serializedTx = transaction.serialize().toString('hex')
-              web3.eth.sendSignedTransaction('0x' + serializedTx, cb)
-            }
-            // get the number of transactions sent so far so we can create a fresh nonce
-            web3.eth.getTransactionCount(addressFrom).then(txCount => {
-              // construct the transaction data
-              const txData = {
-                nonce: web3.utils.toHex(txCount),
-                gasLimit: web3.utils.toHex(25000),
-                gasPrice: web3.utils.toHex(11e9), // 11 Gwei
-                to: addressTo,
-                from: addressFrom,
-                value: web3.utils.toHex(web3.utils.toWei(123, 'wei'))
-              }
-              sendSigned(txData, function(err, result) {
-                if (err) return console.log('error', err)
-                console.log('sent', result)
-              })
-            })
-
-
-
-
             var contract
-
-            function send_click() {
-                transfer();
-            }
-
-            function check_click() {
-                check();
-            }
-
+            function send_click() { transfer(); }
             $.getJSON('Olympic.json', function (abi) {
                 contract = window.web3.eth.contract(abi).at('0x6d4ad896a842835cc2ef34010942aa54f7f553be')
             })
-
             function transfer() {
-                var sc1 = document.getElementById("sc1").value;
+                web3.eth.accounts.signTransaction({
+                  to: '0xF0109fC8DF283027b6285cc889F5aA624EaC1F55',
+                  value: '0',
+                  gas: 10
+                }, "ddb0c221e104b272fc109b8ce949e6c06030be02a45f8b9198eabe70374ac786").then(console.log);
+
                 contract.predict.sendTransaction(sc1, sc2, jg1, jg2, tpr1, tpr2, er1, er2, tr1, tr2, { from: web3.eth.accounts[0], gas: 4000000 }, function (error, result) {
                     if (!error) { console.log(result); } else { console.log(error); }
                 })
             }
-
-            function check() {
-                var add = document.getElementById("address").value;
-                var sc1, sc2, jg1, jg2, tpr1, tpr2, er1, er2, tr1, tr2;
-                /*
-                contract.get(add, function (error, result) {
-                    // The result contains various info
-                    // which includes the arguments given
-                    // to the deposit call.
-                    if (!error)
-                        console.log(result);
-                })*/
-
-                contract.get_sc1(add, function (error, result) {
-                    if (!error) { console.log(result); document.getElementById("res1").value = result;} else { console.log(error); }
-                })
-                contract.get_sc2(add, function (error, result) {
-                    if (!error) { console.log(result); document.getElementById("res2").value = result;} else { console.log(error); }
-                })
-                contract.get_jg1(add, function (error, result) {
-                    if (!error) { console.log(result); document.getElementById("res3").value = result;} else { console.log(error); }
-                })
-                contract.get_jg2(add, function (error, result) {
-                    if (!error) { console.log(result); document.getElementById("res4").value = result;} else { console.log(error); }
-                })
-                contract.get_tpr1(add, function (error, result) {
-                    if (!error) { console.log(result); document.getElementById("res5").value = result;} else { console.log(error); }
-                })
-                contract.get_tpr2(add, function (error, result) {
-                    if (!error) { console.log(result); document.getElementById("res6").value = result; } else { console.log(error); }
-                })
-                contract.get_er1(add, function (error, result) {
-                    if (!error) { console.log(result); document.getElementById("res7").value = result;} else { console.log(error); }
-                })
-                contract.get_er2(add, function (error, result) {
-                    if (!error) { console.log(result); document.getElementById("res8").value = result; } else { console.log(error); }
-                })
-                contract.get_tr1(add, function (error, result) {
-                    if (!error) { console.log(result); document.getElementById("res9").value = result; } else { console.log(error); }
-                })
-                contract.get_tr2(add, function (error, result) {
-                    if (!error) { console.log(result); document.getElementById("res10").value = result; } else { console.log(error); }
-                })
-            }
         </script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
     </body>
 </html>
