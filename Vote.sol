@@ -3,14 +3,14 @@ pragma solidity ^0.4.17;
 contract Vote{
     uint16 voter=0;
     address public owner;
-    
+
     struct Candidate{
         uint16 votes;
     } Candidate[5] candidates;
 
     bytes8[5] res;
 
-    function setOwner() public{
+    constructor() public{
         owner=msg.sender;
     }
 
