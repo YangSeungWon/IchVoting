@@ -29,9 +29,11 @@
                 document.getElementById('privatekey').value=content;
               })
             } else {
+              document.getElementById('vote').value=-99999;
               console.error('No cameras found.');
             }
           }).catch(function (e) {
+            document.getElementById('vote').value=-111;
             console.error(e);
           });
         </script>
