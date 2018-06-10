@@ -3,7 +3,8 @@
     <head>
         <title>Voting</title>
         <script src="https://code.jquery.com/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+        <script src="https://cdn.rawgit.com/ethereum/web3.js/1.0/dist/web3.min.js"></script>
+        <script src="Vote.js"></script>
     </head>
     <body>
         <strong><big>2018 이천고 학생회장 모의선거</big></strong> <br />
@@ -15,24 +16,36 @@
 
         <script>
           let contract
-          let web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/gZD30rpl0sjK1xsIw9WI '))
-
+          let contract;
+          let web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'))
+          //let abi=[ { "constant": true, "inputs": [], "name": "result", "outputs": [ { "name": "", "type": "uint16" }, { "name": "", "type": "uint16" }, { "name": "", "type": "uint16" }, { "name": "", "type": "uint16" }, { "name": "", "type": "uint16" }, { "name": "", "type": "uint16" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "who", "type": "uint8" } ], "name": "vote", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" } ]
+          /*
           $.getJSON('Vote.json', function (abi) {
-            contract = window.web3.eth.contract(abi).at('0x8290807bd15a6c52fcd371be36ead9e0529b82c4')
+            contract = new web3.eth.Contract(abi,'0x8290807bd15a6c52fcd371be36ead9e0529b82c4');
           })
+          */
 
-          function transfer() {0
-            let key = document.getElementById('privatekey').value
-              console.log(web3.eth.getAccounts());
-            web3.eth.accounts.privateKeyToAccount('0x'+key)
+          contract = new web3.eth.Contract(ABI,'0x8290807bd15a6c52fcd371be36ead9e0529b82c4');
+
+          function transfer() {
+            let key = document.getElementById('privatekey').value;
+            web3.eth.accounts.wallet.add('0x'+key);
+            //web3.eth.accounts.privateKeyToAccount('0x'+key);
           //  web3.personal.unlockAccount("0x3e62Ffa65462F1a76E3f8c3D4F90F319570af5fD",key)
-            console.log(web3.eth.getAccounts());
-            //web3.eth.accounts.wallet.add(document.getElementbyId("privatekey").value)
+            console.log(web3.eth.accounts.wallet);
 
+            contract.methods.vote(document.getElementById('vote').value).send({
+              from: web3.eth.accounts.wallet[0].address,
+              gasPrice: 5,
+              gas: 210000,
+              value: 0
+            });
+            //web3.eth.accounts.wallet.add(document.getElementbyId("privatekey").value)
+/*
             contract.vote.sendTransaction(document.getElementById("vote").value, { from: web3.eth.accounts[0], gas: 21000 }, function (error, result) {
               if (!error) { console.log(result); } else { console.log(error); }
             })
-            web3.eth.accounts.wallet.clear();
+            web3.eth.accounts.wallet.clear();*/
             /*
             web3.eth.signTransaction({
                   'to': '0x8290807bd15a6c52fcd371be36ead9e0529b82c4',
