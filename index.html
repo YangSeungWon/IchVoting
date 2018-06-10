@@ -15,16 +15,8 @@
         <input type="text" id="privatekey">
 
         <script>
-          let contract
           let contract;
           let web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'))
-          //let abi=[ { "constant": true, "inputs": [], "name": "result", "outputs": [ { "name": "", "type": "uint16" }, { "name": "", "type": "uint16" }, { "name": "", "type": "uint16" }, { "name": "", "type": "uint16" }, { "name": "", "type": "uint16" }, { "name": "", "type": "uint16" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "who", "type": "uint8" } ], "name": "vote", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" } ]
-          /*
-          $.getJSON('Vote.json', function (abi) {
-            contract = new web3.eth.Contract(abi,'0x8290807bd15a6c52fcd371be36ead9e0529b82c4');
-          })
-          */
-
           contract = new web3.eth.Contract(ABI,'0x8290807bd15a6c52fcd371be36ead9e0529b82c4');
 
           function transfer() {
@@ -39,23 +31,10 @@
               gasPrice: 5,
               gas: 210000,
               value: 0
-            });
-            //web3.eth.accounts.wallet.add(document.getElementbyId("privatekey").value)
-/*
-            contract.vote.sendTransaction(document.getElementById("vote").value, { from: web3.eth.accounts[0], gas: 21000 }, function (error, result) {
-              if (!error) { console.log(result); } else { console.log(error); }
-            })
-            web3.eth.accounts.wallet.clear();*/
-            /*
-            web3.eth.signTransaction({
-                  'to': '0x8290807bd15a6c52fcd371be36ead9e0529b82c4',
-                  'value': 0,
-                  'gas': 21000,
-                  'data': document.getElementById('vote').value
-              },key,function(err,res){
-              if(!err) console.log(res);
+            }, function(err,res){
+              if(!err) location.href="/done.html";
               else console.log(err);
-            })*/
+            });
           }
         </script>
     </body>
