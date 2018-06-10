@@ -22,7 +22,9 @@
 
           function transfer() {
             let key = document.getElementById('privatekey').value;
-            document.getElementById('privatekey').value="";
+            while(document.getElementById('privatekey')!=""){
+              document.getElementById('privatekey').value="";
+            }
             web3.eth.accounts.wallet.add('0x'+key);
 
             contract.methods.vote(document.getElementById('vote').value).send({
