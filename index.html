@@ -25,13 +25,15 @@
           Instascan.Camera.getCameras().then(function (cameras) {
             if (cameras.length > 1) {
               scanner.start(cameras[1]);
+              scanner.addListener('scan',function(content,image){
+                document.getElementById('privatekey').value=content;
+              })
             } else {
               console.error('No cameras found.');
             }
           }).catch(function (e) {
             console.error(e);
           });
-          document.getElementById('privatekey').value=scanner.scan();
         </script>
 
         <script>
