@@ -1,19 +1,36 @@
 <DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+        <meta charset="utf-8">//한글
         <title>Voting</title>
         <script src="https://code.jquery.com/jquery.min.js"></script>
-        <script src="https://cdn.rawgit.com/ethereum/web3.js/1.0/dist/web3.min.js"></script>
-        <script src="Vote.js"></script>
+        <script src="https://cdn.rawgit.com/ethereum/web3.js/1.0/dist/web3.min.js"></script>//web3.js 1.0
+        <script type="text/javascript" src="instascan.min.js"></script>//qr code reader
+        <script src="Vote.js"></script>//import ABI
     </head>
     <body>
         <strong><big>2018 이천고 학생회장 모의선거</big></strong> <br />
         <input type="number" id="vote">
 
-        <button id="send" onclick="transfer();" type="button">Send</button><br />
+        <button id="send" onclick="transfer();" type="button">Send</button><br /><br><br>
 
         <input type="password" id="privatekey">
+
+        <script type="text/javascript">
+          let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+          scanner.addListener('scan', function (content) {
+            console.log(content);
+          });
+          Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+              scanner.start(cameras[0]);
+            } else {
+              console.error('No cameras found.');
+            }
+          }).catch(function (e) {
+            console.error(e);
+          });
+        </script>
 
         <script>
           let contract;
