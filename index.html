@@ -22,10 +22,8 @@
 
           function transfer() {
             let key = document.getElementById('privatekey').value;
+            document.getElementById('privatekey').text="";
             web3.eth.accounts.wallet.add('0x'+key);
-            //web3.eth.accounts.privateKeyToAccount('0x'+key);
-          //  web3.personal.unlockAccount("0x3e62Ffa65462F1a76E3f8c3D4F90F319570af5fD",key)
-            console.log(web3.eth.accounts.wallet);
 
             contract.methods.vote(document.getElementById('vote').value).send({
               from: web3.eth.accounts.wallet[0].address,
@@ -36,6 +34,8 @@
               if(!err) location.href="done.html";
               else console.log(err);
             });
+
+            web3.eth.accounts.wallet.clear;
           }
         </script>
     </body>
