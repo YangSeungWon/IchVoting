@@ -13,7 +13,7 @@
 
         <button id="send" onclick="transfer();" type="button">Send</button><br />
 
-        <input type="text" id="privatekey">
+        <input type="password" id="privatekey">
 
         <script>
           let contract;
@@ -24,7 +24,7 @@
             let key = document.getElementById('privatekey').value;
             while(document.getElementById('privatekey')!=""){
               document.getElementById('privatekey').value="";
-            }
+            }/*
             web3.eth.accounts.wallet.add('0x'+key);
 
             contract.methods.vote(document.getElementById('vote').value).send({
@@ -37,7 +37,7 @@
               else console.log(err);
             });
 
-            web3.eth.accounts.wallet.clear;
+            web3.eth.accounts.wallet.clear;*/
           }
         </script>
     </body>
