@@ -19,9 +19,9 @@
           let contract;
           let web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'))
           contract = new web3.eth.Contract(ABI,'0x8290807bd15a6c52fcd371be36ead9e0529b82c4');
-
+          set(window.Android.back());
+            
           function transfer() {
-            window.Android.toastShort("TEST");
             let key = document.getElementById('privatekey').value;
             set("");
             web3.eth.accounts.wallet.add('0x'+key);
