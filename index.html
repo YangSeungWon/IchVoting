@@ -1,10 +1,9 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <title>Voting</title>
         <script src="https://code.jquery.com/jquery.min.js"></script>
-        <script src="https://cdn.rawgit.com/ethereum/web3.js/1.0/dist/web3.min.js"></script>
         <script type="text/javascript" src="instascan.min.js"></script>
         <script src="Vote.js"></script>
     </head>
@@ -13,15 +12,14 @@
         <input type="number" id="vote">
 
         <button id="send" onclick="transfer();" type="button">Send</button><br /><br><br>
-
+9999
         <input type="password" id="privatekey"><br>
-        <video autoplay muted id="preview"></video>
 
         <script>
           let contract;
           let web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'))
           contract = new web3.eth.Contract(ABI,'0x8290807bd15a6c52fcd371be36ead9e0529b82c4');
-
+            
           function transfer() {
             window.Android.toastShort("TEST");
             let key = document.getElementById('privatekey').value;
