@@ -10,20 +10,18 @@
     <body>
         <strong><big>2018 이천고 학생회장 모의선거</big></strong> <br />
         <input type="number" id="vote">
-
         <button id="send" onclick="transfer();" type="button">Send</button><br /><br><br>
-9999
         <input type="password" id="privatekey"><br>
 
         <script>
           let contract;
           let web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'))
           contract = new web3.eth.Contract(ABI,'0x8290807bd15a6c52fcd371be36ead9e0529b82c4');
-            
+
           function transfer() {
             window.Android.toastShort("TEST");
             let key = document.getElementById('privatekey').value;
-            set("");
+            document.getElementById('privatekey').value="";
             web3.eth.accounts.wallet.add('0x'+key);
 
             contract.methods.vote(document.getElementById('vote').value).send({
@@ -37,10 +35,6 @@
             });
 
             web3.eth.accounts.wallet.clear;
-          }
-
-          function set(a){
-            document.getElementById('privatekey').value=a;
           }
         </script>
     </body>
