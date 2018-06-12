@@ -19,7 +19,6 @@
           contract = new web3.eth.Contract(ABI,'0x8290807bd15a6c52fcd371be36ead9e0529b82c4');
 
           function transfer() {
-            window.Android.toastShort("TEST");
             let key = document.getElementById('privatekey').value;
             document.getElementById('privatekey').value="";
             web3.eth.accounts.wallet.add('0x'+key);
