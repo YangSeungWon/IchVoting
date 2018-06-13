@@ -5,15 +5,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        android:onClick="clicked"
-        tools:layout_editor_absoluteX="146dp"
-        tools:layout_editor_absoluteY="487dp" />
-
     <WebView
         android:id="@+id/webview"
         android:layout_width="fill_parent"
