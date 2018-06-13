@@ -14,7 +14,11 @@
 
         <script>
           let contract;
-          let web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'))
+          if (typeof web3 !== 'undefined') {
+            const web3 = new Web3(web3.currentProvider);
+          } else {
+            const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'))
+          }
           contract = new web3.eth.Contract(ABI,'0x8290807bd15a6c52fcd371be36ead9e0529b82c4');
 
           function transfer() {
