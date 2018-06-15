@@ -13,8 +13,9 @@
         <label><input type="radio" name="select" value="1"/> 찬성 </label>
         <label><input type="radio" name="select" value="2"/> 반대 </label> <!추가로 필요한 경우 복사해서 value 값만 바꿔서 사용. 5이상이 필요한 경우 스마트 컨트랙트에서도 수정 필요.>
         <button id="send" onclick="transfer();" type="button">Send</button><br /><br><br>
-        <input type="password" id="privatekey" ><br>
-	<div id="loading">
+        <input type="password" id="privatekey" disabled><br>
+	<input type="text" id="error" disabled><br>
+        <div id="loading">
           <img src="images/loading.gif" alt="Loading..." />
         </div>
 
@@ -45,8 +46,10 @@
               if(!err) {
                 web3.eth.accounts.wallet.clear;
                 location.href="done.html";
-              }
-              else console.log(err);
+              }else{
+		document.getElementById('error')=err;
+                console.log(err);
+	      }
             });
           }
 
