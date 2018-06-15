@@ -22,7 +22,7 @@
           let contract;
           const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'));
           contract = new web3.eth.Contract(ABI,'0xf45b962243e256da87c294dc01ca1c6cbd6420af');
-
+	  const gasPrice = web3.eth.gasPrice.toNumber() * 1.40 
 
           function transfer() {
             var i;
