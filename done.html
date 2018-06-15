@@ -4,12 +4,16 @@
         <meta charset="utf-8">
         <title>done</title>
         <link rel="stylesheet" type="text/css" href="mystyle.css">
+        <script src="https://code.jquery.com/jquery.min.js"></script>
     </head>
     <body>
         <strong><big>2018 이천고 학생회장 모의선거</big></strong> <br />
         투표가 완료되었습니다. 감사합니다.
+        <div id="loading">
+          <img src="images/loading.gif" alt="Loading..." />
+        </div>
         <script language="javascript" type="text/javascript">
-            $(window).load(function() {
+            $(window).ready(function() {
                 $('#loading').hide();
             });
         </script>
