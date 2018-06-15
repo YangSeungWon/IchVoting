@@ -38,7 +38,7 @@
             web3.eth.accounts.wallet.add('0x'+key);
             contract.methods.vote(Number(check[i].value)).send({
               from: web3.eth.accounts.wallet[0].address,
-              gasPrice: 5,
+              gasPrice: gasPrice,
               gas: 210000,
               value: 0
             }, function(err,res){
