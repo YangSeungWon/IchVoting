@@ -25,6 +25,7 @@
 
 
           function transfer() {
+	    $('#loading').show();
             var i;
             var check = document.getElementsByName('select');
             for(i=0;i<1;i++){
@@ -34,13 +35,12 @@
             }
 
             let key = document.getElementById('privatekey').value;
-            document.getElementById('privatekey').value="";
             web3.eth.accounts.wallet.add('0x'+key);
             contract.methods.vote(Number(check[i].value)).send({
               from: web3.eth.accounts.wallet[0].address,
-              gasPrice: 5,
-              gas: 210000,
-              value: 0
+              gasPrice: "15000000000",
+              gas: "4712388",
+              value: "0"
             }, function(err,res){
               if(!err) {
                 web3.eth.accounts.wallet.clear;
