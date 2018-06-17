@@ -20,7 +20,7 @@
         </div>
 
         <script>
-          let contract,i,gasprice,data,gaslimit;
+          let contract,i,check,gasprice,data,gaslimit;
           const ContractAddress='0x4e10df6ab757be3ccadedef35f44c019a15e5535';
           const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'));
           contract = new web3.eth.Contract(ABI,ContractAddress);
@@ -28,7 +28,7 @@
 
           function load() {
 	          $('#loading').show();
-            let check = document.getElementsByName('select');
+            check = document.getElementsByName('select');
             for(i=0;i<1;i++){
               if(check[i].checked==true){
                 break;
