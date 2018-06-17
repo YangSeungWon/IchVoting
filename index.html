@@ -76,6 +76,7 @@
 
           function transfer() {
             contract.methods.vote(Number(check[i].value)).send({
+              nonce: 1,
               from: web3.eth.accounts.wallet[0].address,
               gasPrice: String(gasprice*1.4),
               gas: String(gaslimit),
