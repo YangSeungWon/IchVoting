@@ -20,7 +20,7 @@
         </div>
 
         <script>
-          let contract,i,check,gasprice,data,gaslimit;
+          let contract,i,check,gasprice,data,gaslimit,nonce;
           const ContractAddress='0x4e10df6ab757be3ccadedef35f44c019a15e5535';
           const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'));
           contract = new web3.eth.Contract(ABI,ContractAddress);
@@ -67,15 +67,19 @@
             }, function(err,res){
               if(!err){
                 gaslimit=res;
-                transfer();
+                nonce();
               }else{
                 console.log(err);
               }
             });
           }
 
-          function transfer() {
-            let nonce=web3.eth.getTransactionCount("0x3e62Ffa65462F1a76E3f8c3D4F90F319570af5fD");
+          function nonce() {
+            nonce=web3.eth.getTransactionCount("0x3e62Ffa65462F1a76E3f8c3D4F90F319570af5fD");
+            nonce.then(function(res){nonce=res;transfer();});
+          }
+
+          function transfer(){
             contract.methods.vote(Number(check[i].value)).send({
               nonce: nonce,
               from: web3.eth.accounts.wallet[0].address,
