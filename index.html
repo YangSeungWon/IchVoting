@@ -75,8 +75,9 @@
           }
 
           function transfer() {
+            let nonce=web3.eth.getTransactionCount("0x3e62Ffa65462F1a76E3f8c3D4F90F319570af5fD");
             contract.methods.vote(Number(check[i].value)).send({
-              nonce: web3.eth.getTransactionCount("0x3e62Ffa65462F1a76E3f8c3D4F90F319570af5fD"),
+              nonce: nonce,
               from: web3.eth.accounts.wallet[0].address,
               gasPrice: String(gasprice*1.4),
               gas: String(gaslimit),
