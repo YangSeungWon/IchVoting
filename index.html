@@ -43,21 +43,21 @@
 
             const data=contract.methods.vote(Number(check[i].value)).encodeABI();
 
-            let gas;
+            let gaslimit;
             web3.eth.estimateGas({
               from: web3.eth.accounts.wallet[0].address,
               to: ContractAddress,
               data: data
             }, function(err,res){if(!err){gas=res;console.log(gas);}else{console.log(err);}});
-
-            console.log(gasprice, gas);
+            
             contract.methods.vote(Number(check[i].value)).send({
               from: web3.eth.accounts.wallet[0].address,
               gasPrice: gasprice*1.4,
-              gas: Number(gas),
+              gas: gaslimit,
               value: "0"
             }, function(err,res){
               if(!err) {
+                console.log(gasprice,gaslimit)
                 web3.eth.accounts.wallet.clear;
                 location.href="done.html";
               }else{
