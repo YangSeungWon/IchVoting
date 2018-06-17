@@ -21,8 +21,9 @@
 
         <script>
           let contract;
+          const ContractAddress='0x4e10df6ab757be3ccadedef35f44c019a15e5535';
           const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'));
-          contract = new web3.eth.Contract(ABI,'0x4e10df6ab757be3ccadedef35f44c019a15e5535');
+          contract = new web3.eth.Contract(ABI,ContractAddress);
 
 
           function transfer() {
@@ -36,20 +37,23 @@
             }
             let key = document.getElementById('privatekey').value;
             web3.eth.accounts.wallet.add('0x'+key);
+
             let gasprice;
             web3.eth.getGasPrice(function(err,res){if(!err){gasprice=res}});
+
             const data=contract.methods.vote(Number(check[i].value)).encodeABI();
+
             let gas;
             web3.eth.estimateGas({
               from: web3.eth.accounts.wallet[0].address,
-              to: '0xf45b962243e256da87c294dc01ca1c6cbd6420af',
-              value: "0",
+              to: ContractAddress,
               data: data
             }, function(err,res){if(!err){gas=res;}});
-            console.log(gas);
+
+            console.log(gasprice, gas);
             contract.methods.vote(Number(check[i].value)).send({
               from: web3.eth.accounts.wallet[0].address,
-              gasPrice: Number(gasprice.c)*1.4,
+              gasPrice: gasprice*1.4+"",
               gas: gas,
               value: "0"
             }, function(err,res){
