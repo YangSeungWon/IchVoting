@@ -52,7 +52,7 @@
 
             contract.methods.vote(Number(check[i].value)).send({
               from: web3.eth.accounts.wallet[0].address,
-              gasPrice: String(gasprice*1.4),
+              gasPrice: gasprice*1.4,
               gas: String(gaslimit),
               value: "0"
             }, function(err,res){
