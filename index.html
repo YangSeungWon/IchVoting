@@ -86,8 +86,7 @@
                 web3.eth.accounts.wallet.clear;
                 location.href="done.html";
               }else{
-                console.log(err);
-                transfer();
+                console.error(err);
 	            }
             });
           }
