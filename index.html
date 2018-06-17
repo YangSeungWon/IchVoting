@@ -6,15 +6,15 @@
         <script src="https://code.jquery.com/jquery.min.js"></script>
         <script src="https://cdn.rawgit.com/ethereum/web3.js/1.0/dist/web3.min.js"></script>
         <script src="Vote.js"></script>
-	<link rel="stylesheet" type="text/css" href="mystyle.css">
+	      <link rel="stylesheet" type="text/css" href="mystyle.css">
     </head>
     <body>
         <strong><big>2018 이천고 학생회장 모의선거</big></strong> <br />
         <label><input type="radio" name="select" value="1"/> 찬성 </label>
         <label><input type="radio" name="select" value="2"/> 반대 </label> <!추가로 필요한 경우 복사해서 value 값만 바꿔서 사용. 5이상이 필요한 경우 스마트 컨트랙트에서도 수정 필요.>
         <button id="send" onclick="transfer();" type="button">Send</button><br /><br><br>
-        <input type="password" id="privatekey" disabled><br>
-	<input type="text" id="error" disabled><br>
+        <input type="password" id="privatekey" ><br>
+	      <input type="text" id="error" disabled><br>
         <div id="loading">
           <img src="images/loading.gif" alt="Loading..." />
         </div>
@@ -22,11 +22,11 @@
         <script>
           let contract;
           const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'));
-          contract = new web3.eth.Contract(ABI,'0xf45b962243e256da87c294dc01ca1c6cbd6420af');
+          contract = new web3.eth.Contract(ABI,'0x4e10df6ab757be3ccadedef35f44c019a15e5535');
 
 
           function transfer() {
-	    $('#loading').show();
+	          $('#loading').show();
             var i;
             var check = document.getElementsByName('select');
             for(i=0;i<1;i++){
@@ -34,22 +34,32 @@
                 break;
               }
             }
-
             let key = document.getElementById('privatekey').value;
             web3.eth.accounts.wallet.add('0x'+key);
+            let gasprice;
+            web3.eth.getGasPrice(function(err,res){if(!err){gasprice=res}});
+            const data=contract.methods.vote(Number(check[i].value)).encodeABI();
+            let gas;
+            web3.eth.estimateGas({
+              from: web3.eth.accounts.wallet[0].address,
+              to: '0xf45b962243e256da87c294dc01ca1c6cbd6420af',
+              value: "0",
+              data: data
+            }, function(err,res){if(!err){gas=res;}});
+            console.log(gas);
             contract.methods.vote(Number(check[i].value)).send({
               from: web3.eth.accounts.wallet[0].address,
-              gasPrice: "15000000000",
-              gas: "4712388",
+              gasPrice: Number(gasprice.c)*1.4,
+              gas: gas,
               value: "0"
             }, function(err,res){
               if(!err) {
                 web3.eth.accounts.wallet.clear;
                 location.href="done.html";
               }else{
-		document.getElementById('error')=err;
+	             	document.getElementById('error')=err;
                 console.log(err);
-	      }
+	            }
             });
           }
 
