@@ -13,7 +13,7 @@
         <label><input type="radio" name="select" value="1"/> 찬성 </label>
         <label><input type="radio" name="select" value="2"/> 반대 </label> <!추가로 필요한 경우 복사해서 value 값만 바꿔서 사용. 5이상이 필요한 경우 스마트 컨트랙트에서도 수정 필요.>
         <button id="send" onclick="load();" type="button">Send</button><br /><br><br>
-        <input type="password" id="privatekey" ><br>
+        <input type="password" id="privatekey" disabled><br>
 	      <input type="text" id="error" disabled><br>
         <div id="loading">
           <img src="images/loading.gif" alt="Loading..." />
@@ -21,7 +21,7 @@
 
         <script>
           let contract,i,check,gasprice,data,gaslimit,nonce;
-          const ContractAddress='0x4e10df6ab757be3ccadedef35f44c019a15e5535';
+          const ContractAddress='0x7840e76cb8297dce3f182b5c28d3a58f30f000de';
           const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'));
           contract = new web3.eth.Contract(ABI,ContractAddress);
 
