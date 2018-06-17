@@ -12,7 +12,7 @@
         <strong><big>2018 이천고 학생회장 모의선거</big></strong> <br />
         <label><input type="radio" name="select" value="1"/> 찬성 </label>
         <label><input type="radio" name="select" value="2"/> 반대 </label> <!추가로 필요한 경우 복사해서 value 값만 바꿔서 사용. 5이상이 필요한 경우 스마트 컨트랙트에서도 수정 필요.>
-        <button id="send" onclick="transfer();" type="button">Send</button><br /><br><br>
+        <button id="send" onclick="load();" type="button">Send</button><br /><br><br>
         <input type="password" id="privatekey" ><br>
 	      <input type="text" id="error" disabled><br>
         <div id="loading">
@@ -20,39 +20,64 @@
         </div>
 
         <script>
-          let contract;
+          let contract,i,gasprice,data,gaslimit;
           const ContractAddress='0x4e10df6ab757be3ccadedef35f44c019a15e5535';
           const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'));
           contract = new web3.eth.Contract(ABI,ContractAddress);
 
 
-          function transfer() {
+          function load() {
 	          $('#loading').show();
-            var i;
-            var check = document.getElementsByName('select');
+            let check = document.getElementsByName('select');
             for(i=0;i<1;i++){
               if(check[i].checked==true){
                 break;
               }
             }
+            addAccount();
+          }
+          function addAccount(){
             let key = document.getElementById('privatekey').value;
             web3.eth.accounts.wallet.add('0x'+key);
+            getprice();
+          }
 
-            let gasprice;
-            web3.eth.getGasPrice(function(err,res){if(!err){gasprice=res;console.log(gasprice);}else{console.log(err)}});
+          function getprice() {
+            gasprice;
+            web3.eth.getGasPrice(function(err,res){
+              if(!err){
+                gasprice=res;
+                getData();
+              }else{
+                console.log(err)
+              }
+            });
+          }
 
-            const data=contract.methods.vote(Number(check[i].value)).encodeABI();
+          function getData(){
+            data=contract.methods.vote(Number(check[i].value)).encodeABI();
+            getLimit();
+          }
 
-            let gaslimit;
+          function getLimit(){
             web3.eth.estimateGas({
               from: web3.eth.accounts.wallet[0].address,
               to: ContractAddress,
               data: data
-            }, function(err,res){if(!err){gaslimit=res;console.log(gaslimit);}else{console.log(err);}});
+            }, function(err,res){
+              if(!err){
+                gaslimit=res;
+                transfer();
+              }else{
+                console.log(err);
+              }
+            });
+          }
 
+          function transfer() {
             contract.methods.vote(Number(check[i].value)).send({
               from: web3.eth.accounts.wallet[0].address,
-              gasPrice: gasprice*1.4,
+              gasPrice: String(gasprice*1.4),
               gas: String(gaslimit),
               value: "0"
             }, function(err,res){
