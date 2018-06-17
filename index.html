@@ -39,7 +39,7 @@
             web3.eth.accounts.wallet.add('0x'+key);
 
             let gasprice;
-            web3.eth.getGasPrice(function(err,res){if(!err){gasprice=res;console.log(gasprice);}});
+            web3.eth.getGasPrice(function(err,res){if(!err){gasprice=res;console.log(gasprice);}else{console.log(err)}});
 
             const data=contract.methods.vote(Number(check[i].value)).encodeABI();
 
@@ -48,12 +48,12 @@
               from: web3.eth.accounts.wallet[0].address,
               to: ContractAddress,
               data: data
-            }, function(err,res){if(!err){gas=res;console.log(gas);}});
+            }, function(err,res){if(!err){gas=res;console.log(gas);}else{console.log(err);}});
 
             console.log(gasprice, gas);
             contract.methods.vote(Number(check[i].value)).send({
               from: web3.eth.accounts.wallet[0].address,
-              gasPrice: gasprice*1.4+"",
+              gasPrice: (gasprice*1.4+""),
               gas: gas,
               value: "0"
             }, function(err,res){
