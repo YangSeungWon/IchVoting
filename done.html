@@ -1,21 +1,22 @@
 ﻿<!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+        <meta charset="utf-8"> <!--페이지가 한글로 표시되게 하기 위해 인코딩 방식을 UTF-8로 지정해줘야한다. 안그러면 깨져서 나온다.-->
         <title>done</title>
-        <link rel="stylesheet" type="text/css" href="mystyle.css">
-        <script src="https://code.jquery.com/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="mystyle.css"> <!--css파일을 불러오는 코드. css파일에서는 웹페이지의 디자인을 전담한다. 자세한 내용은 mystyle.css 참조-->
+        <script src="https://code.jquery.com/jquery.min.js"></script> <!-- 자바스크립트를 더 편리하게 쓰기 위해 jQuery 라이브러리를 불러온다. -->
     </head>
     <body>
-        <strong><big>2018 이천고 학생회장 모의선거</big></strong> <br />
+        <strong><big>2018 이천고 학생회장 모의선거</big></strong> <br /> <!--<strong>은 굵게, <big>은 크게. <br/>는 줄바꿈(엔터)이다.-->
         투표가 완료되었습니다. 감사합니다.
-        <div id="loading">
-          <img src="images/loading.gif" alt="Loading..." />
-        </div>
-        <script language="javascript" type="text/javascript">
-            $(window).ready(function() {
-                $('#loading').hide();
+        <div id="loading"> <!-- 로딩창을 따로 띄우기 위해 div를 만들었다.-->
+          <img src="images/loading.gif" alt="Loading..." /> <!-- 이 div에는 images폴더의 loading.gif가 들어있고, 이미지를 로딩하지 못한경우 alt에 있는 Loading...을 대신 띄우게 된다.-->
+        </div> <!-- 로딩 div 끝.-->
+        <!-- 이제 내부 동작을 위한 자바스크립트 부분이다.-->
+        <script language="javascript" type="text/javascript"> // <script>로 시작을 알린다.
+            $(window).ready(function() {  //페이지가 로딩이 다 되었을 경우
+                $('#loading').hide(); //로딩창을 숨긴다.
             });
-        </script>
+        </script> <!-- 닫을 때는 항상 '/'로-->
     </body>
 </html>

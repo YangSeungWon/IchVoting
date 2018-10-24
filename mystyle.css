@@ -1,4 +1,4 @@
-#loading {
+#loading { /* id가 loading인 부분을 찾는다. <div id="loading"> 부터 </div>까지를 찾게 된다. 한마디로 로딩창에게 적용되는 양식.*/
 	width: 100%;
 	height: 100%;
 	top: 0;
@@ -7,13 +7,13 @@
 	display: block;
 	opacity: 0.8;
 	background: white;
-	z-index: 99;
+	z-index: 99; /*맨 위*/
 	text-align: center;
 }
 
-#loading > img {
+#loading > img { /* <div id="loading"> 안에 있는 <img src="images/loading.gif" alt="Loading..." /> 을 찾게 된다. 로딩창 안의 이미지에 적용되는 양식.*/
 	position: absolute;
 	top: 5%;
 	left: 5%;
-	z-index: 100;
+	z-index: 100; /* 더 맨 위 */
 }

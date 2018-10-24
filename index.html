@@ -1,107 +1,117 @@
 ﻿<!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+        <meta charset="utf-8"> <!--페이지가 한글로 표시되게 하기 위해 인코딩 방식을 UTF-8로 지정해줘야한다. 안그러면 깨져서 나온다.-->
         <title>Voting</title>
-        <script src="https://code.jquery.com/jquery.min.js"></script>
-        <script src="https://cdn.rawgit.com/ethereum/web3.js/1.0/dist/web3.min.js"></script>
-        <script src="Vote.js"></script>
-	      <link rel="stylesheet" type="text/css" href="mystyle.css">
+        <script src="https://code.jquery.com/jquery.min.js"></script> <!-- 자바스크립트를 더 편리하게 쓰기 위해 jQuery 라이브러리를 불러온다. -->
+        <script src="https://cdn.rawgit.com/ethereum/web3.js/1.0/dist/web3.min.js"></script> <!-- 메타마스크를 쓰지 않기 때문에 web3.js 1.0 버전을 가져온다.-->
+        <script src="Vote.js"></script> <!-- Vote.js를 불러온다. 왜 불러오는지는 해당 파일 참조.-->
+	      <link rel="stylesheet" type="text/css" href="mystyle.css"> <!--css파일을 불러오는 코드. css파일에서는 웹페이지의 디자인을 전담한다. 자세한 내용은 mystyle.css 참조-->
     </head>
     <body>
-        <strong><big>2018 이천고 학생회장 출구조사</big></strong> <br />
-        <label><input type="radio" name="select" value="1"/> 찬성 </label>
-        <label><input type="radio" name="select" value="2"/> 반대 </label> <!추가로 필요한 경우 복사해서 value 값만 바꿔서 사용. 5이상이 필요한 경우 스마트 컨트랙트에서도 수정 필요.>
-        <button id="send" onclick="load();" type="button">Send</button><br /><br><br>
-        <input type="password" id="privatekey" disabled><br>
-	      <input type="text" id="error" disabled><br>
-        <div id="loading">
-          <img src="images/loading.gif" alt="Loading..." />
+        <strong><big>2018 이천고 학생회장 출구조사</big></strong> <br /> <!--<strong>은 굵게, <big>은 크게. <br/>는 줄바꿈(엔터)이다.-->
+        <label><input type="radio" name="select" value="1"/> 찬성 </label> <!--<lable>부터 </label>이 하나늬 투표자를 나타낸다. 그 안에 'radio'가 있는데 동그란 선택 버튼이다. 하나만 선택되어야 할 때 쓴다.-->
+        <label><input type="radio" name="select" value="2"/> 반대 </label> <!--추가로 필요한 경우 복사해서 value 값만 바꿔서 사용. 5이상이 필요한 경우 스마트 컨트랙트에서도 수정 필요.-->
+        <button id="send" onclick="load();" type="button">Send</button><br /><br><br> <!--버튼이다. id는 send, 클릭되었을 경우 load 함수를 실행한다.-->
+        <input type="password" id="privatekey" disabled><br> <!--QR코드를 인식해 받은 비밀키를 담아놓는 장소. 타입이 password로 되어있어 ●●●●으로 뜨고 disabled 때문에 클릭할 수 없다.-->
+	      <input type="text" id="error" disabled><br> <!-- 에러 확인용-->
+        <div id="loading"><!-- 로딩창을 따로 띄우기 위해 div를 만들었다.-->
+          <img src="images/loading.gif" alt="Loading..." /> <!-- 이 div에는 images폴더의 loading.gif가 들어있고, 이미지를 로딩하지 못한경우 alt에 있는 Loading...을 대신 띄우게 된다.-->
         </div>
 
         <script>
-          let contract,i,check,gasprice,data,gaslimit,nonce;
-          const ContractAddress='0x7840e76cb8297dce3f182b5c28d3a58f30f000de';
-          const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'));
-          contract = new web3.eth.Contract(ABI,ContractAddress);
+          let contract,i,check,gasprice,data,gaslimit,nonce; //변수 선언.
+          const ContractAddress='0x7840e76cb8297dce3f182b5c28d3a58f30f000de'; //접근할 스마트 컨트랙트의 주소를 const(변경 불가)로 박아 놓는다.
+          const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/')); //메타마스크를 쓰지 않기 때문에 프로바이더 지정
+          contract = new web3.eth.Contract(ABI,ContractAddress); //ABI와 컨트랙트 주소로 컨트랙트 불러오기. ABI는 Vote.js에서 왔다.
 
+          //지금부터 나오는 함수들이 짧게 끊겨있는 이유는 가독성 때문도 있지만 콜백(CallBack)함수 때문이다. 나올 때 자세히 설명하겠다.
 
-          function load() {
-	          $('#loading').show();
-            check = document.getElementsByName('select');
-            for(i=0;i<1;i++){
-              if(check[i].checked==true){
-                break;
+          function load() { //버튼이 눌리고 나서 실행되는 로딩 함수.
+	          $('#loading').show(); //트랜잭션이 실행되는 동안 로딩창을 보이게 한다.
+            check = document.getElementsByName('select'); //name이 select인 위에 있던 두 radio input을 찾게 된다. 그 두개가 차례대로 check 배열에 담긴다.
+            for(i=0;i<1;i++){ //check[0] : 찬성  check[1] : 반대
+              if(check[i].checked==true){ //checked가 true 라는 것을 선택되어 있다는 것이다.
+                break;//그러면 반복문을 바로 빠져 나온다. 그러면 i에는 0또는 1이 담겨있고, 선택되어 있는 숫자를 가리키게 된다.
               }
             }
-            addAccount();
+            addAccount();//다음 함수를 불러온다.
           }
           function addAccount(){
-            let key = document.getElementById('privatekey').value;
-            web3.eth.accounts.wallet.add('0x'+key);
-            getprice();
+            let key = document.getElementById('privatekey').value; //QR코드로 읽어온 비밀키가  <input type="password" id="privatekey" disabled> 에 담겨있는데, 이것을 id로 찾는다. 그리고 .value로 값을 빼와 key 변수에 저장한다.
+            web3.eth.accounts.wallet.add('0x'+key); //비밀키를 이용해 web3의 이더리움 지갑 목록에 이 계정을 추가한다. 0x를 더하는 이유는 16진수임을 나타내기 위해서.
+            getprice();//다음 함수를 불러온다.
           }
 
           function getprice() {
-            gasprice;
-            web3.eth.getGasPrice(function(err,res){
-              if(!err){
-                gasprice=res;
-                getData();
-              }else{
-                console.log(err)
+            web3.eth.getGasPrice(function(err,res){ //Gas는 이더리움에서 쓰이는 수수료의 다른 이름이다. 현재 트랜잭션을 정상적으로 보내기 위해 필요한 수수료의 정도를 가져오는 함수이다.
+              //이 함수가 콜백함수이다. 함수를 불러올 때 함수이름(fucntion(err,res){ }); 이렇게 쓴다. 콜백함수를 쓰는 이유는 간단하다.
+              //프로그램을 위에서 아래로 바로바로 실행되지만, GasPrice를 가져오는 것은 조금 시간이 걸린다. 아직 GasPrice를 받아오지 않았는데 다음으로 넘어가게 되면 개발자의 예상과 다른 결과가 나타나게 된다.
+              //그래서 함수안에 다시 함수를 넣어 getGasPrice가 완전히 완료된 후에 실행되는 부분을 만들게 된다.
+              if(!err){ //에러가 일어나지 않았을 경우(err는 error의 줄임말)
+                gasprice=res; //gasprice 변수에 결과값(적절한 GasPrice 값)을 담는다. res는 지역변수이기 때문에 이 함수를 벗어나면 접근할 수 없다. (res는 result의 줄임말)
+                getData();//그 후에 다음 함수를 실행한다.
+              }else{//에러가 발생하면
+                console.log(err);//F12누르고 볼 수 있는 console 창에 에러의 세부사항을 띄운다.
               }
-            });
+            });//여기 괄호가 복잡하니 주의
           }
 
           function getData(){
-            data=contract.methods.vote(Number(check[i].value)).encodeABI();
-            getLimit();
+            data=contract.methods.vote(Number(check[i].value)).encodeABI();//아까 i에 값을 저장해 놨기 때문에 i는 0또는 1이고 check[i].value는 1또는 2이다. 그런데 문자이기 때문에 Number()로 강제로 숫자로 바꾼다.
+            //ABI와 컨트랙트 주소로 찾아놓은 우리의 컨트랙트. 그 컨트랙트의 vote 함수에 그 값을 넣어주는 트랜잭션을 .encodeABI로 미리 만들어본 다음에 data에 저장해놓는다.
+            getLimit();//다음
           }
 
           function getLimit(){
-            web3.eth.estimateGas({
-              from: web3.eth.accounts.wallet[0].address,
-              to: ContractAddress,
-              data: data
-            }, function(err,res){
-              if(!err){
-                gaslimit=res;
-                getNonce();
-              }else{
-                console.log(err);
+            web3.eth.estimateGas({ //아까는 GasPrice를 가져왔다. 이제 Gas를 몇 개 쓸 건지 또 가져와야 한다. GasPrice가 백 원이고 Gas가 3개라면 수수료로 300원을 내게 된다고 생각하면 된다.
+              //이제 어떤 트랜잭션을 보낼건지 설명해줘야한다. 왜냐하면 이더리움 네트워크는 해당 트랜잭션이 컴퓨팅 자원을 얼마나 소모하는지에 따라 수수료를 부과한다.
+              from: web3.eth.accounts.wallet[0].address, //아까 비밀키로 찾은 지갑에서
+              to: ContractAddress, //컨트랙트 주소로
+              data: data //값을 전송할 건데요
+            }, function(err,res){//얼마 내야 되나요? 또 콜백함수다.
+              if(!err){//에러가 나지 않으면
+                gaslimit=res;//적절한 가스 갯수 gaslimit에 저장하고
+                getNonce();//다음 함수
+              }else{//에러 나면
+                console.log(err);//콘솔 창에 출력
               }
             });
           }
 
-          function getNonce() {
-            nonce=web3.eth.getTransactionCount("0x3e62Ffa65462F1a76E3f8c3D4F90F319570af5fD","pending");
-            nonce.then(function(res){nonce=res;transfer();});
+          function getNonce() { //nonce는 이중 지불을 막기위해 트랜잭션에 지정되는 번호이다. 한 블록 안에서 0부터 시작해서 1씩 커진다. 자세한건 https://kb.myetherwallet.com/transactions/what-is-nonce.html 참조.
+            nonce=web3.eth.getTransactionCount(web3.eth.accounts.wallet[0].address,"pending"); //트랜잭션 몇개 했는지 받아와서 nonce 값을 지정할거다. 트랜잭션 1개가 대기 중이라면 새로 만들 트랜잭션의 nonce는 두번째인 1이 되어야 한다.
+            //내 계정의 주소에서 pending(대기) 중인 트랜잭션의 갯수를 가져온다.
+            //밑에 나오는 건 콜백함수의 또다른 형태로, 다르게 Promise 라고 부른다. 위에 함수가 완료되면 .then이 실행되니 똑같다고 생각해도 된다.
+            nonce.then(function(res){
+              nonce=res;
+              transfer();
+            }); //결과값을 nonce에 저장하고 다음 함수로
           }
 
           function transfer(){
-            contract.methods.vote(Number(check[i].value)).send({
-              nonce: nonce,
-              from: web3.eth.accounts.wallet[0].address,
-              gasPrice: String(gasprice*1.4),
-              gas: String(gaslimit),
-              value: "0"
-            }, function(err,res){
-              if(!err) {
-                console.log(gasprice,gaslimit)
-                web3.eth.accounts.wallet.clear;
-                location.href="done.html";
-              }else{
-                console.error(err);
-                $('#loading').hide();
+            contract.methods.vote(Number(check[i].value)).send({ //이제 진짜로 보낼거다.
+              nonce: nonce, //펜딩 중인 트랜잭션 수로 구한 nonce와
+              from: web3.eth.accounts.wallet[0].address, //내 지갑의 주소와
+              gasPrice: String(gasprice*1.4), //가스 비용은 넉넉잡아 1.4배 해준다. 많을 수록 빨리 간다. 숫자를 String()으로 강제로 문자열로 바꿔준다.
+              gas: String(gaslimit), //가스 갯수
+              value: "0" //이더리움은 안 담아서 보낼거다.
+            }, function(err,res){//역시 또 콜백.
+              if(!err) {//에러 안났으면
+                console.log(gasprice,gaslimit)//가스비 콘솔에 한번 찍어주고
+                web3.eth.accounts.wallet.clear;//지갑 지워주고
+                location.href="done.html";//done.html을 연다.
+              }else{//에러 났으면
+                console.error(err);//에러 콘솔에 띄우고
+                $('#loading').hide();//로딩창이 사라졌으니 뭔가 잘못됐다는 뜻
 	            }
             });
           }
 
         </script>
-	<script language="javascript" type="text/javascript">
-            $(window).ready(function() {
-                $('#loading').hide();
+	      <script language="javascript" type="text/javascript">
+            $(window).ready(function() { //로딩 다되면
+                $('#loading').hide();//로딩창 숨기기 (페이지 처음 불러올 때. 혼동 금지)
             });
         </script>
     </body>
