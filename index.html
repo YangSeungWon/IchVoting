@@ -20,10 +20,17 @@
         </div>
 
         <script>
+<<<<<<< HEAD
           let contract,i,check,gasprice,data,gaslimit,nonce; //변수 선언.
           const ContractAddress='0x7840e76cb8297dce3f182b5c28d3a58f30f000de'; //접근할 스마트 컨트랙트의 주소를 const(변경 불가)로 박아 놓는다.
           const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/')); //메타마스크를 쓰지 않기 때문에 프로바이더 지정
           contract = new web3.eth.Contract(ABI,ContractAddress); //ABI와 컨트랙트 주소로 컨트랙트 불러오기. ABI는 Vote.js에서 왔다.
+=======
+          let contract,i,check,gasprice,data,gaslimit,nonce;
+          const ContractAddress='0x38bf7ec233c6f300ec68ab328cbf85af941ebb6e';
+          const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/'));
+          contract = new web3.eth.Contract(ABI,ContractAddress);
+>>>>>>> 3faaa494447546694ba057f2221fbd32a66bd271
 
           //지금부터 나오는 함수들이 짧게 끊겨있는 이유는 가독성 때문도 있지만 콜백(CallBack)함수 때문이다. 나올 때 자세히 설명하겠다.
 
